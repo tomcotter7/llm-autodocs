@@ -2,15 +2,15 @@ graph [
   directed 1
   node [
     id 0
-    label "democode.audio_main"
+    label "C:\Users\TCotter\Documents\personal\doc-gen\democode\audio_main.py"
   ]
   node [
     id 1
-    label "democode.helper"
+    label "C:\Users\TCotter\Documents\personal\doc-gen\democode\helper.py"
   ]
   node [
     id 2
-    label "democode.spreadsheet_main"
+    label "C:\Users\TCotter\Documents\personal\doc-gen\democode\spreadsheet_main.py"
   ]
   edge [
     source 1

@@ -104,17 +104,17 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="democode.audio_main.main">
 <span class="sig-prename descclassname"><span class="pre">democode.audio_main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/democode/audio_main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#democode.audio_main.main" title="Link to this definition"></a></dt>
-<dd><p>Main function to convert a PDF file into an audiobook using command line arguments.</p>
-<p>This function uses argparse to parse command line arguments for the input PDF file, the voice to be used for text-to-speech conversion, and the start and end pages for the conversion. It then calls the create_audio function to perform the conversion.</p>
+<dd><p>Acts as the entry point for the script that converts PDF files to audio format.</p>
+<p>This script takes a PDF file as input and converts it into an audio file using text-to-speech technology. The user can specify the voice type and the range of pages to convert.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>arguments.</strong> (<em>None. The function retrieves all necessary information from command line</em>) – </p>
+<dd class="field-odd"><p><strong>None</strong> – </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>None. The function calls create_audio which writes the resulting audio to an MP3 file.</p>
+<dd class="field-even"><p>The function does not return any value. It invokes the create_audio function to generate the audio file.</p>
 </dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>argparse.ArgumentError</strong> – If the command line arguments are not correctly provided.</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -125,18 +125,20 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="democode.helper.create_audio">
 <span class="sig-prename descclassname"><span class="pre">democode.helper.</span></span><span class="sig-name descname"><span class="pre">create_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pdf_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page_range</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/democode/helper.html#create_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#democode.helper.create_audio" title="Link to this definition"></a></dt>
-<dd><p>Creates an audio file from a given PDF file using text-to-speech conversion.</p>
-<p>This function reads the text from the specified pages of a PDF file, converts the text to speech using the specified voice, and saves the resulting audio to an MP3 file. The name of the output file is the same as the input file, but with the extension changed to .mp3.</p>
+<dd><p>Converts a range of pages from a PDF file into an audio file using text-to-speech.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pdf_file</strong> (<em>str</em>) – The path to the PDF file to be converted to audio.</p></li>
-<li><p><strong>voice</strong> (<em>str</em>) – The voice to be used for the text-to-speech conversion.</p></li>
-<li><p><strong>page_range</strong> (<em>list</em>) – A list of page numbers to be included in the audio. Page numbers start from 0.</p></li>
+<li><p><strong>pdf_file</strong> (<em>str</em>) – The path to the PDF file to be converted.</p></li>
+<li><p><strong>voice</strong> (<em>str</em>) – The voice setting to be used for the text-to-speech conversion.</p></li>
+<li><p><strong>page_range</strong> (<em>list</em><em> of </em><em>int</em>) – A list of page numbers to be included in the conversion.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>None. The function writes the resulting audio to an MP3 file.</p>
+<dd class="field-even"><p>The function writes the audio content to an MP3 file with the same name as the PDF file.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -144,16 +146,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="democode.helper.day_to_column">
 <span class="sig-prename descclassname"><span class="pre">democode.helper.</span></span><span class="sig-name descname"><span class="pre">day_to_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/democode/helper.html#day_to_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#democode.helper.day_to_column" title="Link to this definition"></a></dt>
-<dd><p>Converts a given day number to a corresponding column letter(s) in a spreadsheet.</p>
-<p>This function takes a day number and converts it to a corresponding column letter(s) in a spreadsheet.
-The conversion is based on the ASCII values of the English alphabet letters. The function uses a while loop
-to iterate through the day number and generate the corresponding column letter(s).</p>
+<dd><p>Converts a day number to a column label similar to Excel column naming convention.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>day</strong> (<em>int</em>) – The day number to be converted to a column letter(s).</p>
+<dd class="field-odd"><p><strong>day</strong> (<em>int</em>) – The day number to be converted into a column label.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The corresponding column letter(s) for the given day number.</p>
+<dd class="field-even"><p>The corresponding column label for the given day number.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
@@ -164,20 +163,19 @@ to iterate through the day number and generate the corresponding column letter(s
 <dl class="py function">
 <dt class="sig sig-object py" id="democode.helper.tts_text">
 <span class="sig-prename descclassname"><span class="pre">democode.helper.</span></span><span class="sig-name descname"><span class="pre">tts_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">voice</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/democode/helper.html#tts_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#democode.helper.tts_text" title="Link to this definition"></a></dt>
-<dd><p>Converts a given text into speech using Google’s Text-to-Speech API.</p>
-<p>This function takes a text string and a voice name as input, synthesizes the text into speech using the specified voice, and returns the synthesized speech as an audio file in MP3 format.</p>
+<dd><p>Converts text to speech using Google’s Text-to-Speech API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>text</strong> (<em>str</em>) – The text to be converted into speech.</p></li>
-<li><p><strong>voice</strong> (<em>str</em>) – The name of the voice to be used for the speech synthesis. This should be a valid voice name supported by Google’s Text-to-Speech API.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The text to be converted to speech.</p></li>
+<li><p><strong>voice</strong> (<em>str</em>) – The name of the voice model to be used for the speech synthesis, e.g., ‘en-GB-Wavenet-D’.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The response from the Text-to-Speech API, which includes the synthesized speech audio.</p>
+<dd class="field-even"><p>An object containing the synthesized audio data.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>google.cloud.texttospeech_v1.types.SynthesizeSpeechResponse</p>
+<dd class="field-odd"><p>texttospeech.types.SynthesizeSpeechResponse</p>
 </dd>
 </dl>
 </dd></dl>
@@ -188,16 +186,10 @@ to iterate through the day number and generate the corresponding column letter(s
 <dl class="py function">
 <dt class="sig sig-object py" id="democode.spreadsheet_main.get_cell">
 <span class="sig-prename descclassname"><span class="pre">democode.spreadsheet_main.</span></span><span class="sig-name descname"><span class="pre">get_cell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/democode/spreadsheet_main.html#get_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#democode.spreadsheet_main.get_cell" title="Link to this definition"></a></dt>
-<dd><p>Generates a cell reference in a Google Sheets spreadsheet for the current date.</p>
-<p>This function generates a cell reference in a Google Sheets spreadsheet for the current date.
-The cell reference is in the format ‘YearMonth!Column38’, where Year is the current year,
-Month is the current month in full text (e.g., January, February, etc.), Column is the
-corresponding column letter(s) for the current day number, and 38 is a fixed row number.
-The function uses the datetime module to get the current date and the day_to_column function
-to convert the day number to a column letter(s).</p>
+<dd><p>Fetches the cell reference in an Excel-like spreadsheet for today’s date at a specific row.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The cell reference in the format ‘YearMonth!Column38’ for the current date.</p>
+<dd class="field-odd"><p>The cell reference combining the current year, month, column equivalent of today’s day, and the fixed row number 38.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>

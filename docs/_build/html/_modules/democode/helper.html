@@ -78,17 +78,13 @@
 <a class="viewcode-back" href="../../democode.html#democode.helper.day_to_column">[docs]</a>
 <span class="k">def</span> <span class="nf">day_to_column</span><span class="p">(</span><span class="n">day</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Converts a given day number to a corresponding column letter(s) in a spreadsheet.</span>
-<span class="sd">    </span>
-<span class="sd">    This function takes a day number and converts it to a corresponding column letter(s) in a spreadsheet. </span>
-<span class="sd">    The conversion is based on the ASCII values of the English alphabet letters. The function uses a while loop </span>
-<span class="sd">    to iterate through the day number and generate the corresponding column letter(s).</span>
+<span class="sd">    Converts a day number to a column label similar to Excel column naming convention.</span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
-<span class="sd">        day (int): The day number to be converted to a column letter(s).</span>
+<span class="sd">        day (int): The day number to be converted into a column label.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        str: The corresponding column letter(s) for the given day number.</span>
+<span class="sd">        str: The corresponding column label for the given day number.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">start_index</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">letter</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
@@ -103,16 +99,14 @@
 <a class="viewcode-back" href="../../democode.html#democode.helper.tts_text">[docs]</a>
 <span class="k">def</span> <span class="nf">tts_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">voice</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Converts a given text into speech using Google&#39;s Text-to-Speech API.</span>
-<span class="sd">    </span>
-<span class="sd">    This function takes a text string and a voice name as input, synthesizes the text into speech using the specified voice, and returns the synthesized speech as an audio file in MP3 format.</span>
+<span class="sd">    Converts text to speech using Google&#39;s Text-to-Speech API.</span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
-<span class="sd">        text (str): The text to be converted into speech.</span>
-<span class="sd">        voice (str): The name of the voice to be used for the speech synthesis. This should be a valid voice name supported by Google&#39;s Text-to-Speech API.</span>
+<span class="sd">        text (str): The text to be converted to speech.</span>
+<span class="sd">        voice (str): The name of the voice model to be used for the speech synthesis, e.g., &#39;en-GB-Wavenet-D&#39;.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        google.cloud.texttospeech_v1.types.SynthesizeSpeechResponse: The response from the Text-to-Speech API, which includes the synthesized speech audio.</span>
+<span class="sd">        texttospeech.types.SynthesizeSpeechResponse: An object containing the synthesized audio data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">client</span> <span class="o">=</span> <span class="n">texttospeech</span><span class="o">.</span><span class="n">TextToSpeechClient</span><span class="p">()</span>
     <span class="c1"># Set the text input to be synthesized</span>
@@ -146,17 +140,15 @@
 <a class="viewcode-back" href="../../democode.html#democode.helper.create_audio">[docs]</a>
 <span class="k">def</span> <span class="nf">create_audio</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">,</span> <span class="n">voice</span><span class="p">,</span> <span class="n">page_range</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates an audio file from a given PDF file using text-to-speech conversion.</span>
-<span class="sd">    </span>
-<span class="sd">    This function reads the text from the specified pages of a PDF file, converts the text to speech using the specified voice, and saves the resulting audio to an MP3 file. The name of the output file is the same as the input file, but with the extension changed to .mp3.</span>
+<span class="sd">    Converts a range of pages from a PDF file into an audio file using text-to-speech.</span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
-<span class="sd">        pdf_file (str): The path to the PDF file to be converted to audio.</span>
-<span class="sd">        voice (str): The voice to be used for the text-to-speech conversion.</span>
-<span class="sd">        page_range (list): A list of page numbers to be included in the audio. Page numbers start from 0.</span>
+<span class="sd">        pdf_file (str): The path to the PDF file to be converted.</span>
+<span class="sd">        voice (str): The voice setting to be used for the text-to-speech conversion.</span>
+<span class="sd">        page_range (list of int): A list of page numbers to be included in the conversion.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        None. The function writes the resulting audio to an MP3 file.</span>
+<span class="sd">        None: The function writes the audio content to an MP3 file with the same name as the PDF file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># I want to read the input in based on a command line input</span>
     <span class="n">read_Pdf</span> <span class="o">=</span> <span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">pdf_file</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>

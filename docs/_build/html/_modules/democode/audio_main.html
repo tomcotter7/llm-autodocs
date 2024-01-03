@@ -79,18 +79,15 @@
 <a class="viewcode-back" href="../../democode.html#democode.audio_main.main">[docs]</a>
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Main function to convert a PDF file into an audiobook using command line arguments.</span>
+<span class="sd">    Acts as the entry point for the script that converts PDF files to audio format.</span>
 <span class="sd">    </span>
-<span class="sd">    This function uses argparse to parse command line arguments for the input PDF file, the voice to be used for text-to-speech conversion, and the start and end pages for the conversion. It then calls the create_audio function to perform the conversion.</span>
+<span class="sd">    This script takes a PDF file as input and converts it into an audio file using text-to-speech technology. The user can specify the voice type and the range of pages to convert.</span>
 <span class="sd">    </span>
 <span class="sd">    Args:</span>
-<span class="sd">        None. The function retrieves all necessary information from command line arguments.</span>
+<span class="sd">        None</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        None. The function calls create_audio which writes the resulting audio to an MP3 file.</span>
-<span class="sd">    </span>
-<span class="sd">    Raises:</span>
-<span class="sd">        argparse.ArgumentError: If the command line arguments are not correctly provided.</span>
+<span class="sd">        None: The function does not return any value. It invokes the create_audio function to generate the audio file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="s2">&quot;A program to convert pdf files into audiobooks&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;ifile&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The input pdf to convert to an audiobook&quot;</span><span class="p">)</span>

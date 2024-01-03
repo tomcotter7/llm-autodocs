@@ -78,17 +78,10 @@
 <a class="viewcode-back" href="../../democode.html#democode.spreadsheet_main.get_cell">[docs]</a>
 <span class="k">def</span> <span class="nf">get_cell</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generates a cell reference in a Google Sheets spreadsheet for the current date.</span>
-<span class="sd">    </span>
-<span class="sd">    This function generates a cell reference in a Google Sheets spreadsheet for the current date. </span>
-<span class="sd">    The cell reference is in the format &#39;YearMonth!Column38&#39;, where Year is the current year, </span>
-<span class="sd">    Month is the current month in full text (e.g., January, February, etc.), Column is the </span>
-<span class="sd">    corresponding column letter(s) for the current day number, and 38 is a fixed row number. </span>
-<span class="sd">    The function uses the datetime module to get the current date and the day_to_column function </span>
-<span class="sd">    to convert the day number to a column letter(s).</span>
+<span class="sd">    Fetches the cell reference in an Excel-like spreadsheet for today&#39;s date at a specific row.</span>
 <span class="sd">    </span>
 <span class="sd">    Returns:</span>
-<span class="sd">        str: The cell reference in the format &#39;YearMonth!Column38&#39; for the current date.</span>
+<span class="sd">        str: The cell reference combining the current year, month, column equivalent of today&#39;s day, and the fixed row number 38.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
     <span class="n">year</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">year</span>
