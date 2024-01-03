@@ -33,5 +33,6 @@ def is_valid_file(path: str) -> bool:
 def save_graph(G, file_path: str = "deps.gml"):
     nx.write_gml(G, file_path)
 
+# build and save graph
 if __name__ == "__main__":
     save_graph(build_graph_from_json())
