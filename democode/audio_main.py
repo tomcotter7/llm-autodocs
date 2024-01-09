@@ -3,17 +3,6 @@ from .helper import create_audio
 import argparse
 
 def main():
-    """
-    Acts as the entry point for the script that converts PDF files to audio format.
-    
-    This script takes a PDF file as input and converts it into an audio file using text-to-speech technology. The user can specify the voice type and the range of pages to convert.
-    
-    Args:
-        None
-    
-    Returns:
-        None: The function does not return any value. It invokes the create_audio function to generate the audio file.
-    """
     parser = argparse.ArgumentParser("A program to convert pdf files into audiobooks")
     parser.add_argument("ifile", help="The input pdf to convert to an audiobook")
     parser.add_argument('--voice', '-v', help="The voice to use in this audio file. \

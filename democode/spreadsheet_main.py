@@ -2,12 +2,6 @@ from datetime import datetime
 from .helper import day_to_column
 
 def get_cell():
-    """
-    Fetches the cell reference in an Excel-like spreadsheet for today's date at a specific row.
-    
-    Returns:
-        str: The cell reference combining the current year, month, column equivalent of today's day, and the fixed row number 38.
-    """
     date = datetime.today()
     year = date.year
     month = date.strftime("%B")

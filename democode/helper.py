@@ -2,15 +2,6 @@ from google.cloud import texttospeech
 from PyPDF2 import PdfFileReader as reader
 
 def day_to_column(day):
-    """
-    Converts a day number to a column label similar to Excel column naming convention.
-    
-    Args:
-        day (int): The day number to be converted into a column label.
-    
-    Returns:
-        str: The corresponding column label for the given day number.
-    """
     start_index = 0
     letter = ''
     while day > 25 + start_index:
@@ -20,16 +11,6 @@ def day_to_column(day):
     return letter
 
 def tts_text(text, voice):
-    """
-    Converts text to speech using Google's Text-to-Speech API.
-    
-    Args:
-        text (str): The text to be converted to speech.
-        voice (str): The name of the voice model to be used for the speech synthesis, e.g., 'en-GB-Wavenet-D'.
-    
-    Returns:
-        texttospeech.types.SynthesizeSpeechResponse: An object containing the synthesized audio data.
-    """
     client = texttospeech.TextToSpeechClient()
     # Set the text input to be synthesized
     synthesis_input = texttospeech.SynthesisInput(text=text)
@@ -58,17 +39,6 @@ def tts_text(text, voice):
 
 
 def create_audio(pdf_file, voice, page_range):
-    """
-    Converts a range of pages from a PDF file into an audio file using text-to-speech.
-    
-    Args:
-        pdf_file (str): The path to the PDF file to be converted.
-        voice (str): The voice setting to be used for the text-to-speech conversion.
-        page_range (list of int): A list of page numbers to be included in the conversion.
-    
-    Returns:
-        None: The function writes the audio content to an MP3 file with the same name as the PDF file.
-    """
     # I want to read the input in based on a command line input
     read_Pdf = reader(open(pdf_file, 'rb'))
     pdf_text = ""
