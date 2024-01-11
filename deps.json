@@ -2,7 +2,7 @@
     "democode": {
         "bacon": 1,
         "name": "democode",
-        "path": "C:\\Users\\TCotter\\Documents\\personal\\doc-gen\\democode\\__init__.py"
+        "path": "/mnt/c/Users/TCotter/Documents/personal/doc-gen/democode/__init__.py"
     },
     "democode.audio_main": {
         "bacon": 1,
@@ -10,7 +10,7 @@
             "democode.helper"
         ],
         "name": "democode.audio_main",
-        "path": "C:\\Users\\TCotter\\Documents\\personal\\doc-gen\\democode\\audio_main.py"
+        "path": "/mnt/c/Users/TCotter/Documents/personal/doc-gen/democode/audio_main.py"
     },
     "democode.helper": {
         "bacon": 1,
@@ -19,7 +19,7 @@
             "democode.spreadsheet_main"
         ],
         "name": "democode.helper",
-        "path": "C:\\Users\\TCotter\\Documents\\personal\\doc-gen\\democode\\helper.py"
+        "path": "/mnt/c/Users/TCotter/Documents/personal/doc-gen/democode/helper.py"
     },
     "democode.spreadsheet_main": {
         "bacon": 1,
@@ -27,6 +27,6 @@
             "democode.helper"
         ],
         "name": "democode.spreadsheet_main",
-        "path": "C:\\Users\\TCotter\\Documents\\personal\\doc-gen\\democode\\spreadsheet_main.py"
+        "path": "/mnt/c/Users/TCotter/Documents/personal/doc-gen/democode/spreadsheet_main.py"
     }
 }

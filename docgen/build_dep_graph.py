@@ -1,8 +1,11 @@
+import argparse
 import json
 import networkx as nx
 
-def build_graph_from_json(file_path: str = 'deps.json') -> nx.DiGraph:
-    with open('deps.json') as f:
+from pathlib import Path
+
+def build_graph_from_json(file_path) -> nx.DiGraph:
+    with open(file_path) as f:
         deps = json.load(f)
     
         nodes = []
@@ -30,9 +33,13 @@ def get_imports(value: dict) -> list:
 def is_valid_file(path: str) -> bool:
     return "__init__.py" not in path
 
-def save_graph(G, file_path: str = "deps.gml"):
-    nx.write_gml(G, file_path)
+def save_graph(G, save_folder: str):
+    nx.write_gml(G, Path(save_folder, "dep_graph.gml"))
 
 # build and save graph
 if __name__ == "__main__":
-    save_graph(build_graph_from_json())
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file_path', type=str)
+    parser.add_argument('--save_path', type=str)
+    args = parser.parse_args()
+    save_graph(build_graph_from_json(args.file_path), args.save_path)
