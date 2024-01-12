@@ -14,6 +14,6 @@ def get_current_docstring(function_code: str) -> str:
 
 def calculate_indentation(function_code: str) -> str:
     func_without_def = function_code[get_start_of_second_line_index(function_code):]
-    first_non_whitespace = re.search(r'\S', first_line).start(0) # type: ignore
+    first_non_whitespace = re.search(r'\S', func_without_def).start(0) # type: ignore
     indentation = func_without_def[:first_non_whitespace]
     return indentation
