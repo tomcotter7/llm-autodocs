@@ -4,7 +4,7 @@ import networkx as nx
 
 from pathlib import Path
 
-def build_graph_from_json(file_path) -> nx.DiGraph:
+def build_graph_from_json(file_path: str | Path) -> nx.DiGraph:
     with open(file_path) as f:
         deps = json.load(f)
     
@@ -13,7 +13,7 @@ def build_graph_from_json(file_path) -> nx.DiGraph:
     
         for _, value in deps.items():
             path = value['path']
-            if is_valid_file(path):
+            if is_documentable_file(path):
                 nodes.append(path)
         
             for imp in get_imports(value):
@@ -30,7 +30,7 @@ def build_graph_from_nodes_and_edges(nodes: list[str], edges: list[tuple[str, st
 def get_imports(value: dict) -> list:
     return value.get('imports', [])
 
-def is_valid_file(path: str) -> bool:
+def is_documentable_file(path: str) -> bool:
     return "__init__.py" not in path
 
 def save_graph(G, save_folder: str):
