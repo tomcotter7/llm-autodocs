@@ -1,2 +1,3 @@
-build-deps:
-	python3 docgen/build_dep_graph.py --file_path deps.json --save_path .
+build-docs:
+	sphinx-apidoc -f -o docs/ democode/ && make -C docs/ clean && make -C docs/ html
+

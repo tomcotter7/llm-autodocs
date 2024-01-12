@@ -11,6 +11,31 @@ def day_to_column(day):
     return letter
 
 def tts_text(text, voice):
+    """Converts text to speech using Google's Text-to-Speech API.
+
+ 
+    This function takes a string of text, and a voice selection as inputs. It then uses Google's Text-to-Speech client to synthesize the text into speech, formatting the audio file as an MP3. The voice for the speech is chosen based on the input voice selection, with the gender being neutral and the language code being 'en-GB'.
+
+ 
+    Args:
+ 
+     
+    text - The text to be converted into speech (string)
+ 
+     
+    voice - The voice selection for the speech synthesis (string)
+ 
+    Returns:
+ 
+     
+    A response from Google's Text-To-Speech API which contains the synthesized speech audio file.
+ 
+    Example:
+ 
+     
+    tts_text('Hello, world!', 'en-GB-Wavenet-D')
+ 
+    """
     client = texttospeech.TextToSpeechClient()
     # Set the text input to be synthesized
     synthesis_input = texttospeech.SynthesisInput(text=text)

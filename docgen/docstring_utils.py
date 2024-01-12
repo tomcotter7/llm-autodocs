@@ -1,3 +1,5 @@
+import re
+
 from typing import Optional
 
 from docgen.pydantic_models import DocString
@@ -40,5 +42,6 @@ def build_docstring(docstring_object: DocString) -> str:
 def add_indentation(docstring: str, function_code: str) -> str:
     indentation = calculate_indentation(function_code)
     docstring = indentation + docstring
-    docstring = docstring.replace('\n', '\n' + indentation).rstrip()
+    docstring = re.sub(r'\n([^\n])', '\n' + indentation + r'\1', docstring).rstrip()
+    docstring = docstring.replace("\t", indentation)
     return docstring
