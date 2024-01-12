@@ -1,8 +1,10 @@
 import argparse
+import logging
 
 from docgen.docgen import docgen
 
 def main(deps_file):
+    logging.basicConfig(encoding='utf-8', level=logging.INFO)
     docgen(deps_file)
     
 

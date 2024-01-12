@@ -1,4 +1,5 @@
 import ast
+import logging
 
 from docgen.docstring_utils import build_docstring, add_indentation
 from docgen.build_deps import build_graph_from_json
@@ -72,7 +73,9 @@ def get_docstrings_for_module(module: str, imports: list[str], visited: dict) ->
             )
             new_source_code = new_source_code.replace(function_code, new_function_code)
             visited = update_visited(visited, module, docstring_object)
+            logging.info(f"Added docstring for {docstring_object.function_name}")
     
+    logging.info(f"Updating {module}")
     update_module_with_docstrings(module, new_source_code)
         
     return visited
@@ -98,7 +101,7 @@ def docgen(file_path: str):
     visited = {}
     while queue:
         node = queue.pop(0)
-        print(f"Working on {node}")
+        logging.info(f"Working on {node}")
         if node not in visited:
             parents = list(G.predecessors(node))
             visited = get_docstrings_for_module(node, parents, visited)

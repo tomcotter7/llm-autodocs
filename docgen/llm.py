@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 
 from dotenv import load_dotenv
@@ -49,20 +50,23 @@ def generate_docstring(code: str, functions_used: list[tuple[str, str]], prev_re
     info_for_llm = (None, None)
     if prev_response:
         info_for_llm = (prev_response, "This response resulted in a JSON decode error. Please try again.")
+
+    logging.info(f"Making request to LLM")
     args = llm_docstring_args(prompt, info_for_llm).choices[0] \
             .message.tool_calls[0].function.arguments # type: ignore
     try:
 
         docstring = DocString(**json.loads(args))
-        print("Generated docstring for: ", docstring.function_name)
+        logging.info("Generated docstring for: ", docstring.function_name)
         return docstring
 
     except json.decoder.JSONDecodeError as e:
-        print("Failed to generate docstring for: ", code)
-        print("LLM output:", [args])
-        print("There was a JSONDecodeError:", e)
+        logging.error("Failed to generate docstring for: ", code)
+        logging.error("LLM output:", [args])
+        logging.error("There was a JSONDecodeError:", e)
+        logging.warning("Trying again...")
 
-        return generate(code, functions_used, args)
+        return generate_docstring(code, functions_used, args)
 
 
 
