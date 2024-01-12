@@ -6,12 +6,11 @@ def get_start_of_second_line_index(function_code: str) -> int:
     return eol + definition + 1
 
 def get_current_docstring(function_code: str) -> str:
-    eol = get_start_of_second_line_index(function_code)
     current_docstring = [(m.start(0), m.end(0)) for m in re.finditer('"""', function_code)]
     if len(current_docstring) > 0:
         end_of_docstring = current_docstring[-1][1]
-        first_non_whitespace = re.search(r'\S', function_code[end_of_docstring:]).start(0)
-        return function_code[eol+1:current_docstring[-1][1] + first_non_whitespace]
+        first_non_whitespace = re.search(r'\S', function_code[end_of_docstring:]).start(0) # type: ignore
+        return function_code[current_docstring[0][0]:current_docstring[-1][1] + first_non_whitespace]
     return "" 
 
 def calculate_indentation(function_code: str) -> str:
@@ -21,5 +20,4 @@ def calculate_indentation(function_code: str) -> str:
     return indentation
 
 def remove_current_docstring(function_code: str, current_docstring: str) -> str:
-    eol = get_start_of_second_line_index(function_code)
-    return function_code[:eol] + function_code[eol:].replace(current_docstring, "")
+    return function_code.replace(current_docstring, "")

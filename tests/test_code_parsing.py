@@ -15,6 +15,13 @@ def test_get_current_docstring():
     docstring = get_current_docstring(function_code)
     assert docstring == '"""This is a docstring"""\n\t'
 
+def test_get_current_docstring_with_spaces():
+    function_code = "def function():\n    \"\"\"This is a docstring\"\"\"\n    pass"
+    docstring = get_current_docstring(function_code)
+    print([docstring])
+    assert docstring == '"""This is a docstring"""\n    '
+
+
 def test_get_current_docstring_no_docstring():
     function_code = "def function():\n\tpass"
     docstring = get_current_docstring(function_code)

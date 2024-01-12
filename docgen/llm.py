@@ -57,7 +57,8 @@ def generate_docstring(code: str, functions_used: list[tuple[str, str]], prev_re
     try:
 
         docstring = DocString(**json.loads(args))
-        logging.info("Generated docstring for: ", docstring.function_name)
+        log_message = f"Generated docstring for: {docstring.function_name}"
+        logging.info(log_message)
         return docstring
 
     except json.decoder.JSONDecodeError as e:

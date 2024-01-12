@@ -1,5 +1,6 @@
 import ast
 import logging
+import re
 
 from docgen.docstring_utils import build_docstring, add_indentation
 from docgen.build_deps import build_graph_from_json
@@ -39,7 +40,9 @@ def get_docstring_for_function(
 
     current_docstring = get_current_docstring(function_code)
 
-    if len(current_docstring) > 0:           
+    if len(current_docstring) > 0:
+        fn = re.search(r'def\s+(\w+)', function_code).group(1) # type: ignore
+        logging.info(f"Docstring already exists for {fn}. Default is to remove and replace with AI generated docstring.")
         function_code = remove_current_docstring(function_code, current_docstring)
     
     functions_used_in_code = get_used_functions(function_code, current_module, imports, visited, aliases)
