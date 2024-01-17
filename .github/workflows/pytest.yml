@@ -1,9 +1,6 @@
 name: pytest
 run-name: ${{ github.actor }} is running tests
-on:
-  pull_request:
-    paths:
-      - '**.py'
+on: [pull_request]
 jobs:
   run-pytest:
     runs-on: ubuntu-latest
@@ -12,7 +9,8 @@ jobs:
     - uses: actions/setup-python@v5
       with:
         python-version: '3.10'
+    - run: export OPENAI_API_KEY="pytest"
     - run: pip install -r requirements.txt
-    - run: pip install pytest
+    - run: pip install pytest pytest-env
     - run: pytest tests/
 
