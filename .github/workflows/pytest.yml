@@ -1,9 +1,6 @@
 name: pytest
 run-name: ${{ github.actor }} is running tests
-on:
-  pull_request:
-    paths:
-      - '**.py'
+on: [pull_request]
 jobs:
   run-pytest:
     runs-on: ubuntu-latest
