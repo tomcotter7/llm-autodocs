@@ -3,6 +3,17 @@ from .helper import create_audio
 import argparse
 
 def main():
+    """A program to convert pdf files into audiobooks
+
+    This program takes a PDF file as input and converts it to an audio book using Google's text-to-speech API. The user can specify the voice used, and the pages to start and end at.
+    Args:
+        'ifile': The input pdf to convert to an audiobook
+        '--voice', '-v': The voice to use in this audio file. Default voice is 'en-GB-Standard-A'
+        '--start', '-s': The page at which to start converting to an audio book. Default page is 0
+        '--end', '-e': The page at which to end the audio book. Default is the last page of the document
+    Example:
+        main(ifile='document.pdf', voice='en-US-Standard-C', start=5, end=20)
+    """
     """A program to convert pdf files into audiobooks.
 
     This function takes a pdf file, and optional arguments specifying the voice to use and the range of pages to convert, and creates an audiobook file.

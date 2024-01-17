@@ -2,6 +2,16 @@ from google.cloud import texttospeech
 from PyPDF2 import PdfFileReader as reader
 
 def day_to_column(day):
+    """Converts the given day number to its corresponding Excel column character.
+
+    This function takes a day number, and converts it to an Excel column character by calculating the equivalent ASCII value of the day. If the day number is larger than 25 (the number of alphabets), it will extract the corresponding character from the next round of alphabets. For example, a day number of 28 would translate to 'AB'; first round of 26 gives 'A' and the remaining 2 gives 'B'.
+    Args:
+        day: An integer representing the day number
+    Returns:
+        A string representing the corresponding Excel column character
+    Example:
+        day_to_column(28) -> 'AB'
+    """
     """Converts a given day into an Excel column letter.
 
     The function takes a day of the month as an input and converts this day into a corresponding Excel column letter. The conversion is done by using the ASCII values of the alphabet. If the day number is greater than 25, it adds the corresponding letter to the start index and subtracts 1 from it to get an ASCII value that corresponds to a letter. If the day is less than 26, it simply adds the day to the start index to get a corresponding letter.
@@ -21,6 +31,17 @@ def day_to_column(day):
     return letter
 
 def tts_text(text, voice):
+    """Converts input text to speech.
+
+    This function takes in text and a voice parameter, converts the text to speech using Google's TextToSpeech API and returns an audio response.
+    Args:
+        text: The text to be converted to speech
+        voice: The specific voice to be used in the conversion
+    Returns:
+        Google Cloud Text-to-Speech API response, audio data
+    Example:
+        tts_text('Hello World', 'en-GB-Standard-B')
+    """
     """Converts the given text to speech.
 
     The function takes text and voice type as input and uses Google's text to speech client to convert the provided text into speech. The result is returned as an audio response.
@@ -62,6 +83,20 @@ def tts_text(text, voice):
 
 
 def create_audio(pdf_file, voice, page_range):
+    """Converts a range of pages from a PDF to an audio file using text-to-speech.
+
+    This function reads the provided PDF file and extracts the text from the specified range of pages. It then uses text-to-speech to convert this text into audio, which is saved as an MP3 file with the same name as the PDF file.
+    Args:
+        pdf_file: The path to the PDF file to convert.
+        voice: The voice to use for the text-to-speech conversion.
+        page_range: The range of pages to convert.
+    Returns:
+        None
+    Raises:
+        IOError: If the PDF file cannot be opened or the MP3 file cannot be written.
+    Example:
+        create_audio('sample.pdf', 'en-US', range(1, 5))
+    """
     """Creates an audio file from a given PDF file.
 
     This function reads a PDF file, extracts the text from given pages, converts the text into speech using Google Text-to-Speech (TTS), and saves the audio output as an mp3 file. The voice for the TTS can be customized.

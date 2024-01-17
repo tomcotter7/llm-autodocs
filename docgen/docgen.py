@@ -55,8 +55,8 @@ def main(dependencies_file: str, package_name: str) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate docstring for an entire python package")
-    parser.add_argument("--dependencies_file", "--d", help="The file containing the dependencies of the package.")
-    parser.add_argument("--package_name", "--p", help="The name of the package.")
+    parser.add_argument("--dependencies_file", "-d", help="The file containing the dependencies of the package.")
+    parser.add_argument("--package_name", "-p", help="The name of the package.")
     args = parser.parse_args()
     main(args.dependencies_file, args.package_name)
 
