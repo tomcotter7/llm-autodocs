@@ -1,22 +1,21 @@
 from datetime import datetime
-from .helper import day_to_column
+from .helper import day_to_column as dtc
 
 def get_cell():
-    """Generates a string representing an excel cell from today's date
+    """Generates a cell reference for a specific date in a spreadsheet.
 
-    This function initially fetches the current date using datetime.today(). It subsequently extracts the year, month, and day. The month name is fetched in %B format (i.e., full month name). The day is converted into an excel column via a helper function - day_to_column. Finally, all these values are concatenated to form and return an excel cell string.
-
+    This function retrieves the current date, and formats it into a string to be used as a cell reference in a spreadsheet. The cell reference is made up of the current year, month, and day.
     Returns:
-        string
+        str: A string representing the cell reference in the format 'YearMonth!Day38'
     Example:
-        get_cell() # '2022January!A38'
+        get_cell() # Returns: '2022July!738'
     """
     date = datetime.today()
     year = date.year
     month = date.strftime("%B")
     day = date.day
     sheet = str(year) + month + '!'
-    column = day_to_column(day)
+    column = dtc(day)
     return sheet+column+"38"
 
 if __name__ == "__main__":

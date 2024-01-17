@@ -44,14 +44,14 @@ def llm_docstring_args(prompt, prev_response) -> ChatCompletion:
             }
     )
 
-def generate_docstring(code: str, functions_used: list[tuple[str, str]], prev_response: Optional[str] = None) -> DocString:
+def generate_function_docstring(code: str, functions_used: list[tuple[str, str]], prev_response: Optional[str] = None) -> DocString:
     
     prompt = Prompt(code=code, used_functions=functions_used).build_prompt()
     info_for_llm = (None, None)
     if prev_response:
         info_for_llm = (prev_response, "This response resulted in a JSON decode error. Please try again.")
 
-    logging.info(f"Making request to LLM")
+    logging.info("Making request to LLM")
     args = llm_docstring_args(prompt, info_for_llm).choices[0] \
             .message.tool_calls[0].function.arguments # type: ignore
     try:
@@ -67,7 +67,7 @@ def generate_docstring(code: str, functions_used: list[tuple[str, str]], prev_re
         logging.error("There was a JSONDecodeError:", e)
         logging.warning("Trying again...")
 
-        return generate_docstring(code, functions_used, args)
+        return generate_function_docstring(code, functions_used, args)
 
 
 

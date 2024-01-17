@@ -13,4 +13,5 @@ See example system design below:
     - [ ] Python classes
     - [ ] Module level docstring
     - [ ] Package level docstring
+    - [ ] Custom pydeps parser using ast
     - [ ] Alternate language functions (probably godoc)

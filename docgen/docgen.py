@@ -1,112 +1,62 @@
-import ast
+"""Generate docstring for an entire python package"""
+import argparse
 import logging
+import networkx as nx
+import os
 import re
 
-from docgen.docstring_utils import build_docstring, add_indentation
-from docgen.build_deps import build_graph_from_json
-from docgen.code_parsing import get_start_of_second_line_index, get_current_docstring, remove_current_docstring
-from docgen.llm import generate_docstring
-from docgen.pydantic_models import DocString
+from pathlib import Path
 
-def get_used_functions(
-        function_code: str,
-        current_module: str,
-        imports: list[str],
-        visited: dict,
-        aliases: dict
-) -> list[tuple[str, str]]:
+from docgen.dependencies import build_graph_from_json
+from docgen.modules import generate_docstrings_for_module
 
-    used_functions = []
+def file_path_to_module_name(file_path: str, package_name: str) -> str:
     
-    imports.append(current_module)
+    file_path = re.sub(r".*(" + package_name + r".*)\.py", r"\1", file_path)
+    return file_path.replace(os.sep, ".")   
 
-    for import_name in imports:
-        functions = visited.get(import_name, {})
-        for func_name, ds_obj in functions.items():
-            func_name = aliases.get(func_name, func_name)
-            if func_name in function_code:
-                docstring = ds_obj.summary
-                used_functions.append((func_name, docstring))
-    
-    return used_functions
 
-def get_docstring_for_function(
-    function_code: str,
-    current_module: str,
-    imports: list[str],
-    visited: dict,
-    aliases: dict
-) -> tuple[str, DocString]:
+def docgen_module(module_file_path: str, package_name: str, imported_modules: list, function_visited: dict) -> dict:
+    """Generate docstring for a single python module"""
+    module_name = file_path_to_module_name(module_file_path, package_name)
+    logging.info(f"Generating docstrings for module {module_name}")
 
-    current_docstring = get_current_docstring(function_code)
-
-    if len(current_docstring) > 0:
-        fn = re.search(r'def\s+(\w+)', function_code).group(1) # type: ignore
-        logging.info(f"Docstring already exists for {fn}. Default is to remove and replace with AI generated docstring.")
-        function_code = remove_current_docstring(function_code, current_docstring)
-    
-    functions_used_in_code = get_used_functions(function_code, current_module, imports, visited, aliases)
-    docstring_object = generate_docstring(function_code, functions_used_in_code)
-    docstring = build_docstring(docstring_object)
-    docstring = add_indentation(docstring, function_code)
-    
-    eol = get_start_of_second_line_index(function_code) - 1
-    new_function_code = function_code[:eol] + '\n' + docstring + function_code[eol:]
-    
-    
-    return new_function_code, docstring_object
-   
-def get_docstrings_for_module(module: str, imports: list[str], visited: dict) -> dict:
-    
-    with open(module) as f:
+    with open(module_file_path, "r") as f:
         source_code = f.read()
-    new_source_code = source_code
-    
-    aliases = {}
-    tree = ast.parse(source_code)
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
-            function_code = ast.get_source_segment(source_code, node).strip() # type: ignore
-            new_function_code, docstring_object = get_docstring_for_function(
-                function_code,
-                module,
-                imports,
-                visited,
-                aliases
-            )
-            new_source_code = new_source_code.replace(function_code, new_function_code)
-            visited = update_visited(visited, module, docstring_object)
-            logging.info(f"Added docstring for {docstring_object.function_name}")
-    
-    logging.info(f"Updating {module}")
-    update_module_with_docstrings(module, new_source_code)
-        
-    return visited
 
-def update_visited(current_visited: dict, module: str, docstring_object: DocString)-> dict:
+    new_source_code, new_visited = generate_docstrings_for_module(source_code, imported_modules, function_visited, module_name)
 
-    
-    if module not in current_visited:
-        current_visited[module] = {}
-    
-    current_visited[module][docstring_object.function_name] = docstring_object
-    return current_visited
-
-def update_module_with_docstrings(module: str, new_source_code: str):
-    with open(module, 'w') as f:
+    logging.info(f"Writing updated source code to {module_name}")
+    with open(module_file_path, "w") as f:
         f.write(new_source_code)
 
-def docgen(file_path: str):
-    
-    G = build_graph_from_json(file_path)
-    
+    return new_visited
+
+
+def docgen(G: nx.DiGraph, package_name: str) -> None:
+    """Generate docstring for an entire python package"""
     queue = [node for node in G.nodes if G.in_degree(node) == 0]
-    visited = {}
+    function_visited = {}
+    module_visited = set()
     while queue:
         node = queue.pop(0)
-        logging.info(f"Working on {node}")
-        if node not in visited:
-            parents = list(G.predecessors(node))
-            visited = get_docstrings_for_module(node, parents, visited)
-            queue.extend([n for n in G.successors(node)])
-        
+        parents = list(G.predecessors(node))
+        function_visited = docgen_module(node, package_name, parents, function_visited)
+        module_visited.add(node)
+        queue.extend([n for n in G.successors(node) if n not in module_visited])
+
+
+def main(dependencies_file: str, package_name: str) -> None:
+    """Generate docstring for an entire python package"""
+    logging.basicConfig(level=logging.INFO, encoding="utf-8")
+    G = build_graph_from_json(dependencies_file)
+    docgen(G, package_name)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate docstring for an entire python package")
+    parser.add_argument("--dependencies_file", "--d", help="The file containing the dependencies of the package.")
+    parser.add_argument("--package_name", "--p", help="The name of the package.")
+    args = parser.parse_args()
+    main(args.dependencies_file, args.package_name)
+

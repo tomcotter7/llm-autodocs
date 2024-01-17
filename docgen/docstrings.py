@@ -1,12 +1,12 @@
+import ast
 import re
 
 from typing import Optional
 
 from docgen.pydantic_models import DocString
-from docgen.code_parsing import calculate_indentation
 
-def build_docstring(docstring_object: DocString) -> str:
-    init_docstring = f'"""{docstring_object.summary}\n\n{docstring_object.description}\n\n'
+def build_docstring_from_object(docstring_object: DocString) -> str:
+    init_docstring = f'{docstring_object.summary}\n\n{docstring_object.description}\n'
 
 
     def add_string(docstring: str, title: str, content: Optional[str]) -> str:
@@ -32,16 +32,19 @@ def build_docstring(docstring_object: DocString) -> str:
             docstring_object.example.replace("\n", "\n\t") if docstring_object.example else None
     )
     init_docstring = add_string(init_docstring, "Yields", docstring_object.yields)
-
-    init_docstring += '"""'
-
     return init_docstring
 
+def calculate_indentation(function_code: str) -> str:
+    function_code = function_code.strip()
+    sol = function_code.find('\n') + 1
+    func_without_def = function_code[sol:]
+    first_non_whitespace = re.search(r'\S', func_without_def).start(0) # type: ignore
+    indentation = func_without_def[:first_non_whitespace]
+    return indentation
 
-
-def add_indentation(docstring: str, function_code: str) -> str:
-    indentation = calculate_indentation(function_code)
+def add_indentation(docstring: str, indentation: str) -> str:
     docstring = indentation + docstring
-    docstring = re.sub(r'\n([^\n])', '\n' + indentation + r'\1', docstring).rstrip()
-    docstring = docstring.replace("\t", indentation)
+    docstring = re.sub(r'\n([^\n])', '\n' + indentation + r'\1', docstring)
+    if indentation != "\t":
+        docstring = docstring.replace("\t", indentation)
     return docstring
