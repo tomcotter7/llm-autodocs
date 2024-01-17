@@ -13,6 +13,7 @@ from docgen.modules import generate_docstrings_for_module
 def file_path_to_module_name(file_path: str, package_name: str) -> str:
     
     file_path = re.sub(r".*(" + package_name + r".*)\.py", r"\1", file_path)
+    print(file_path)
     return file_path.replace(os.sep, ".")   
 
 
