@@ -20,5 +20,6 @@ See example system design below:
     - [ ] Python classes
     - [ ] Module level docstring
     - [ ] Package level docstring
+    - [ ] CLI tool, i.e. run on package regardless of where in the folder structure the code is.
     - [ ] Custom pydeps parser using ast
-    - [ ] Alternate language functions (probably godoc)
+
