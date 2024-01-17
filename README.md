@@ -1,6 +1,13 @@
 # auto-docs
 
-run `generate_docs.bat/sh` to build the docstring for `democode` - you will need to add your openai api key to `.env.template` and rename it to `.env` for this to work.
+## Running the program
+
+Update `.env.template` to contain your OPENAI_API_KEY and rename it to `.env`.
+
+Update `PACKAGE_NAME` inside `Makefile` to be your package that you want to generate docstrings for.
+Ensure that the `PACKAGE_NAME` corresponds to a python package in the same folder as this README.
+
+Run `make entire` to generate the docstrings in your python code.
 
 See example system design below:
 
@@ -9,7 +16,7 @@ See example system design below:
 ## Roadmap
 
     - [X] Python functions
-    - [ ] Aliased python functions
+    - [X] Aliased python functions
     - [ ] Python classes
     - [ ] Module level docstring
     - [ ] Package level docstring
