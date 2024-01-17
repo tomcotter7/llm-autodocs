@@ -2,7 +2,7 @@ import networkx as nx
 
 from unittest.mock import patch
 
-from docgen.build_deps import (
+from docgen.dependencies import (
     build_graph_from_json,
     build_graph_from_nodes_and_edges,
     get_imports,
