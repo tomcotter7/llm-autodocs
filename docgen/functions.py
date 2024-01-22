@@ -1,11 +1,12 @@
 """This module contains functions for handling entire functions"""
 import ast
 import logging
+import re
 
 from docgen.exceptions import InternalFunctionCalledError
 from docgen.docstrings import calculate_indentation, add_indentation
 from docgen.llm import generate_function_docstring
-from docgen.pydantic_models import DocString
+from docgen.pydantic_models import FunctionDocstring
 
 def get_function_name(function: ast.FunctionDef) -> str:
     """Returns the name of the function"""
@@ -69,14 +70,13 @@ def generate_docstring_for_function(
         internal_functions: list[tuple[str, ast.FunctionDef]],
         imported_functions: dict,
         visited: dict
-) -> DocString:
+) -> FunctionDocstring:
     """Generate a docstring for the function"""
     logging.info(f"Obtaining used functions for {function.name}")
     used_functions = get_used_functions(function, [name for name, _ in internal_functions], imported_functions, visited)
     
     # default is to just remove any existing docstring. TODO: parameterize this.
     if get_current_docstring(function):
-        logging.info(f"Removing existing docstring for {function.name}")
         function = remove_current_docstring(function)
 
     function_code = ast.unparse(function)
@@ -99,6 +99,13 @@ def remove_current_docstring(function: ast.FunctionDef) -> ast.FunctionDef:
     """Remove the current docstring for the function"""
     function.body = function.body[1:]
     return function
+
+def remove_current_docstring_from_source_code(
+        function_code: str
+) -> str:
+    """Remove the current docstring from the function"""
+    function_code = re.sub(r'\n\s+\"\"\"(.|\n)*\"\"\"', '', function_code)
+    return function_code
 
 def add_docstring_to_function(
         function_code: str,

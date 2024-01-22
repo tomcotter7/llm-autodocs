@@ -1,11 +1,10 @@
-import ast
 import re
 
 from typing import Optional
 
-from docgen.pydantic_models import DocString
+from docgen.pydantic_models import FunctionDocstring, ModuleDocstring
 
-def build_docstring_from_object(docstring_object: DocString) -> str:
+def build_function_docstring_from_object(docstring_object: FunctionDocstring) -> str:
     init_docstring = f'{docstring_object.summary}\n\n{docstring_object.description}\n'
 
 
@@ -32,6 +31,20 @@ def build_docstring_from_object(docstring_object: DocString) -> str:
             docstring_object.example.replace("\n", "\n\t") if docstring_object.example else None
     )
     init_docstring = add_string(init_docstring, "Yields", docstring_object.yields)
+    return init_docstring
+
+def build_module_docstring_from_object(docstring_object: ModuleDocstring) -> str:
+    print(docstring_object.additional_info)
+    init_docstring = docstring_object.summary
+    if docstring_object.additional_info is not None:
+        init_docstring += "\n\n" + docstring_object.additional_info
+
+    if docstring_object.usage is not None:
+        init_docstring += "\n\nUsage:\n\t" + docstring_object.usage.replace("\n", "\n\t")
+
+    if docstring_object.additional_info or docstring_object.usage:
+        init_docstring += "\n"
+
     return init_docstring
 
 def calculate_indentation(function_code: str) -> str:
