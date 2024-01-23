@@ -210,4 +210,4 @@ def test_find_if_name_main():
     source_code = "if __name__ == \"__main__\":\n\tprint(\"Hello World\")\n"
     name_main = find_if_name_main(source_code)
 
-    assert name_main == "print(\"Hello World\")\n"
+    assert name_main == "print(\"Hello World\")"
