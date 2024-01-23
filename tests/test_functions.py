@@ -8,7 +8,8 @@ from docgen.functions import (
     get_current_docstring,
     remove_current_docstring,
     add_docstring_to_function,
-    handle_call
+    remove_current_docstring_from_source_code,
+    handle_call,
 )
 
 
@@ -181,6 +182,21 @@ def test_remove_docstring():
             break
 
     assert ast.get_docstring(node) is None and ast.unparse(node) == 'def foo():\n    bar()' # type: ignore
+
+def test_remove_docstring_source_code():
+    code = 'def foo():\n\t"""This is the docstring"""\n\tbar()\n'
+
+    assert remove_current_docstring_from_source_code(code) == 'def foo():\n\tbar()\n'
+
+def test_remove_docstring_source_code_spaces():
+    code = 'def foo():\n    """This is the docstring"""\n    bar()\n'
+
+    assert remove_current_docstring_from_source_code(code) == 'def foo():\n    bar()\n'
+
+def test_remove_docstring_source_code_no_docstring():
+    code = 'def foo():\n\tbar()\n'
+
+    assert remove_current_docstring_from_source_code(code) == 'def foo():\n\tbar()\n'
 
 def test_add_docstring_to_function():
     code = 'def foo():\n\tbar()\n'

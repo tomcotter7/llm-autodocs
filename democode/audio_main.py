@@ -1,51 +1,30 @@
+"""This module, 'democode.audio_main', contains a method 'main' for converting a provided PDF file into an audiobook.
+
+This function reads a PDF file and generates an audiobook. It leverages text extraction and text-to-speech functionalities.
+
+Usage:
+	The 'main' function can be initiated by running 'democode.audio_main' from the command line.
+"""
 from PyPDF2 import PdfFileReader as reader
 from .helper import create_audio
 import argparse
 
 def main():
-    """A program to convert pdf files into audiobooks.
+    """A function to convert a given PDF file into an audiobook
 
-    This function takes a pdf file, and optional arguments specifying the voice to use and the range of pages to convert, and creates an audiobook file.
+    This function takes input arguments such as input file name, voice type, start and end page. It parses these arguments to perform the conversion operation from pdf file to audio file.
     Args:
-        ifile: str - The input pdf to convert to an audiobook
-        --voice: str - The voice to use for the audiobook. Default is 'en-GB-Standard-A'
-        --start: int - The page number to start converting from (inclusive). Default is 0
-        --end: int - The page number to stop converting (exclusive). If not specified, defaults to the last page of the document
+        'ifile': The input PDF to convert into an audiobook
+        'voice': The voice to use in the audio file
+        start: The page at which to start converting to an audiobook
+        end: The page at which to end the audio book
+    Returns:
+        None
+    Raises:
+        IOError: If the input file is not found or not a valid PDF
+        ValueError: If the start or end page are not valid
     Example:
-        main('sample.pdf', '--voice', 'en-GB-Standard-A', '--start', 5, '--end', 10)
-    """
-    """A program to convert pdf files into audiobooks.
-
-    This function takes a pdf file, and optional arguments specifying the voice to use and the range of pages to convert, and creates an audiobook file.
-    Args:
-        ifile: str - The input pdf to convert to an audiobook
-        --voice: str - The voice to use for the audiobook. Default is 'en-GB-Standard-A'
-        --start: int - The page number to start converting from (inclusive). Default is 0
-        --end: int - The page number to stop converting (exclusive). If not specified, defaults to the last page of the document
-    Example:
-        main('sample.pdf', '--voice', 'en-GB-Standard-A', '--start', 5, '--end', 10)
-    """
-    """A program to convert pdf files into audiobooks
-
-    This program takes a PDF file as input and converts it to an audio book using Google's text-to-speech API. The user can specify the voice used, and the pages to start and end at.
-    Args:
-        'ifile': The input pdf to convert to an audiobook
-        '--voice', '-v': The voice to use in this audio file. Default voice is 'en-GB-Standard-A'
-        '--start', '-s': The page at which to start converting to an audio book. Default page is 0
-        '--end', '-e': The page at which to end the audio book. Default is the last page of the document
-    Example:
-        main(ifile='document.pdf', voice='en-US-Standard-C', start=5, end=20)
-    """
-    """A program to convert pdf files into audiobooks.
-
-    This function takes a pdf file, and optional arguments specifying the voice to use and the range of pages to convert, and creates an audiobook file.
-    Args:
-        ifile: str - The input pdf to convert to an audiobook
-        --voice: str - The voice to use for the audiobook. Default is 'en-GB-Standard-A'
-        --start: int - The page number to start converting from (inclusive). Default is 0
-        --end: int - The page number to stop converting (exclusive). If not specified, defaults to the last page of the document
-    Example:
-        main('sample.pdf', '--voice', 'en-GB-Standard-A', '--start', 5, '--end', 10)
+        main('--ifile my_file.pdf', '--voice en-GB-Standard-A', '-s 0', '-e -1')
     """
     parser = argparse.ArgumentParser("A program to convert pdf files into audiobooks")
     parser.add_argument("ifile", help="The input pdf to convert to an audiobook")
