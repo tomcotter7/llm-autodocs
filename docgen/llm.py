@@ -57,7 +57,7 @@ def generate_function_docstring(code: str, functions_used: list[tuple[str, str]]
         error_message = "This response resulted in a JSON decode error. Please try again."
         info_for_llm = (prev_response, str(error_message))
 
-    logging.info("Making request to LLM for function docstring")
+    logging.info("LLM Request for function docstring")
     args = make_call_to_llm(
             FUNCTION_DOCSTRING_SYSTEM_PROMPT,
             prompt,
@@ -66,19 +66,17 @@ def generate_function_docstring(code: str, functions_used: list[tuple[str, str]]
             FunctionDocstring.model_json_schema(),
             info_for_llm
     ).choices[0].message.tool_calls[0].function.arguments # type: ignore
-    try:
 
+    try:
         docstring = FunctionDocstring(**json.loads(args))
         log_message = f"Generated docstring for: {docstring.function_name}"
         logging.info(log_message)
         return docstring
-
     except json.decoder.JSONDecodeError as e:
         logging.error("Failed to generate docstring for: ", code)
         logging.error("LLM output:", [args])
         logging.error("There was a JSONDecodeError:", e)
         logging.warning("Trying again...")
-
         return generate_function_docstring(code, functions_used, args)
 
 def generate_module_docstring(
@@ -93,7 +91,8 @@ def generate_module_docstring(
     if prev_response:
         error_message = "This response resulted in a JSON decode error. Please try again."
         info_for_llm = (prev_response, str(error_message))
-    log_message = f"Making request to LLM for {module_name} docstring"
+
+    log_message = f"LLM request for module ({module_name}) docstring"
     logging.info(log_message)
     args = make_call_to_llm(
             MODULE_DOCSTRING_SYSTEM_PROMPT,

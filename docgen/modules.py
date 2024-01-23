@@ -16,10 +16,19 @@ def generate_docstrings_for_all_functions(
         internal_functions: list[tuple[str, ast.FunctionDef]],
         visited: dict[str, str]
 ) -> tuple[str, dict]:
-    """Generate docstrings for all functions in the module
+    """Generate docstrings for all functions in the module.
+
+    For each function in `internal_functions`, generate a docstring for it and add it to the source code.
+
+    Args:
+        module_source_code (str): The source code of the module.
+        fq_module_name (str): The fully qualified name of the module.
+        imported_functions (dict[str, str]): The dictionary of imported functions from other modules in the package.
+        internal_functions (list[tuple[str, ast.FunctionDef]]): The list of all functions in the module.
+        visited (dict[str, str]): The dictionary of visited functions.
 
     Returns:
-        tuple[str, dict, list]: The source code with docstrings added, a dictionary of visited functions, and a list of functions used in the module
+        tuple[str, dict]: The source code with docstrings added & a dictionary of visited functions
     """
     new_source_code = module_source_code
     while internal_functions:
@@ -49,7 +58,14 @@ def generate_docstrings_for_all_functions(
     return new_source_code, visited
 
 def get_all_internal_functions(module: ast.Module) -> list[tuple[str, ast.FunctionDef]]:
-    """Get all functions in the module"""
+    """Get all functions in the module.
+
+    Args:
+        module: The module AST object.
+    
+    Returns:
+        A list of tuples containing the name and function object.
+    """
     return [(node.name, node) for node in ast.walk(module) if isinstance(node, ast.FunctionDef)]
     
 
@@ -59,7 +75,17 @@ def add_top_level_docstring(
         functions_in_module: list[tuple[str, str]],
         module_name: str
 ) -> str: 
-    """Generate a top level docstring for the module"""
+    """Generate a top level docstring for the module.
+
+    Args:
+        source_code: The source code of the module.
+        module: The module AST object.
+        functions_in_module: The list of functions in the module with their summaries.
+        module_name (str): The fully qualified name of the module.
+
+    Returns:
+        The source code with the top level docstring added.
+    """
     if_name_main = find_if_name_main(source_code)
     docstring_obj = generate_module_docstring(module_name, functions_in_module, if_name_main)
     docstring = build_module_docstring_from_object(docstring_obj)
@@ -73,6 +99,14 @@ def add_top_level_docstring(
     return source_code
 
 def find_if_name_main(source_code: str) -> str|None:
+    """Find the if __name__ == "__main__": block in the source code.
+
+    Args:
+        source_code: The source code of the module.
+
+    Returns:
+        The contents of the if __name__ == "__main__": block. If the block does not exist, return None.
+    """
     pattern = re.compile(r'if __name__ == "__main__":\n\s+((.|\n)*)')
     match = pattern.search(source_code)
     if match:
@@ -86,7 +120,19 @@ def generate_docstrings_for_module(
         visited: dict,
         module_name: str
 ) -> tuple[str, dict]:
-    """Generate docstrings for the module"""
+    """Generate docstrings for the module.
+
+    Generate docstrings for all functions in the module, and then generate a top level docstring for the module.
+
+    Args:
+        source_code: The source code of the module.
+        imported_modules: The list of imported modules.
+        visited: The dictionary of visited functions.
+        module_name: The fully qualified name of the module.
+    
+    Returns:
+        tuple[str, dict]: The source code with docstrings added & a dictionary of visited functions
+    """
     tree = ast.parse(source_code)
     package_name = ".".join(module_name.split(".")[:-1])
     internal_functions = get_all_internal_functions(tree)

@@ -5,8 +5,6 @@ import networkx as nx
 import os
 import re
 
-from pathlib import Path
-
 from docgen.dependencies import build_graph_from_json
 from docgen.modules import generate_docstrings_for_module
 

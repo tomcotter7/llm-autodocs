@@ -17,22 +17,35 @@ def handle_call(
         internal_functions: list[str],
         imported_functions: dict,
         visited: dict
-) -> list:
-    """Get the summary of a function call in the AST"""
+) -> tuple:
+    """Return the summary of the function called if the LLM has previously seen it.
+
+    Args:
+        call: The call AST object.
+        internal_functions: The list of other functions in the module.
+        imported_functions: The dictionary of imported functions from other modules in the package.
+        visited: The dictionary of visited functions.
+
+    Returns:
+        The name of the function called and its summary. An empty tuple if the function has not been visited.
+
+    Raises:
+        InternalFunctionCalledError: If the function calls another function in the module which has not yet been visited.
+    """
 
     if isinstance(call.func, ast.Name) and call.func.id in imported_functions.keys():
 
         try:
-            return [(call.func.id, visited[imported_functions[call.func.id]])]
+            return (call.func.id, visited[imported_functions[call.func.id]])
         except KeyError:
-            return []
+            return ()
     
     elif isinstance(call.func, ast.Name) and call.func.id in internal_functions:
 
         raise InternalFunctionCalledError
     
     elif isinstance(call.func, ast.Attribute) and isinstance(call.func.value, ast.Constant):
-        return []
+        return ()
 
     elif isinstance(call.func, ast.Attribute) and isinstance(call.func.value, ast.Call):
         return handle_call(call.func.value, internal_functions, imported_functions, visited)
@@ -40,11 +53,11 @@ def handle_call(
     elif isinstance(call.func, ast.Attribute) and call.func.value.id in imported_functions.keys(): # type: ignore
         fq_name = imported_functions[call.func.value.id] + '.' + call.func.attr # type: ignore
         try:
-            return [(call.func.value.id + '.' + call.func.attr, visited[fq_name])] # type: ignore
+            return (call.func.value.id + '.' + call.func.attr, visited[fq_name]) # type: ignore
         except KeyError:
-            return []
+            return ()
 
-    return []
+    return ()
 
 
 
@@ -54,13 +67,28 @@ def get_used_functions(
         imported_functions: dict,
         visited: dict
 ) -> list:
-    """Return a list of the functions used in the function with respect to the imported functions"""
+    """Return a list of the functions used in the function with respect to the imported functions
+
+    Args:
+        function: The function AST object.
+        internal_functions: The list of other functions called in the module that are not yet visited.
+        imported_functions: The dictionary of imported functions from other modules in the package.
+        visited: The dictionary of visited functions.
+
+    Returns:
+        A list of tuples containing the name of the function and its summary.
+
+    Raises:
+        InternalFunctionCalledError: If the function calls another function in the module which has not yet been visited.
+    """
 
     used_functions = []
     
     for node in ast.walk(function):
         if isinstance(node, ast.Call):
-            used_functions.extend(handle_call(node, internal_functions, imported_functions, visited))
+            call_summary = handle_call(node, internal_functions, imported_functions, visited)
+            if call_summary:
+                used_functions.append(call_summary)
 
                     
     return used_functions
@@ -71,7 +99,22 @@ def generate_docstring_for_function(
         imported_functions: dict,
         visited: dict
 ) -> FunctionDocstring:
-    """Generate a docstring for the function"""
+    """Generate a docstring for the function
+
+    Preprocesses the function by collecting all the functions used within it, removes the existing docstring, and then generates a new docstring.
+
+    Args:
+        function: The function AST object.
+        internal_functions: The list of other functions called in the module that are not yet visited.
+        imported_functions: The dictionary of imported functions from other modules in the package.
+        visited: The dictionary of visited functions.
+
+    Returns:
+        A FunctionDocstring object which contains the information required to build a docstring.
+
+    Raises:
+        InternalFunctionCalledError: If the function calls another function in the module which has not yet been visited.
+    """
     logging.info(f"Obtaining used functions for {function.name}")
     used_functions = get_used_functions(function, [name for name, _ in internal_functions], imported_functions, visited)
     
@@ -92,18 +135,39 @@ def generate_docstring_for_function(
 def get_current_docstring(
         function: ast.FunctionDef
 ) -> str | None:
-    """Get the current docstring for the function"""
+    """Get the current docstring for the function.
+
+    Args:
+        function: The function AST object.
+
+    Returns:
+        The current docstring for the function. None if there is no docstring.
+    """
     return ast.get_docstring(function)
 
 def remove_current_docstring(function: ast.FunctionDef) -> ast.FunctionDef:
-    """Remove the current docstring for the function"""
+    """Remove the current docstring from a ast.FunctionDef object.
+
+    Args:
+        function: The function AST object.
+    
+    Returns:
+        The function AST object without the docstring.
+    """
     function.body = function.body[1:]
     return function
 
 def remove_current_docstring_from_source_code(
         function_code: str
 ) -> str:
-    """Remove the current docstring from the function"""
+    """Remove the current docstring from the source code of a function.
+
+    Args:
+        function_code: The source code of the function.
+
+    Returns:
+        The source code of the function without the docstring.
+    """
     function_code = re.sub(r'\n\s+\"\"\"(.|\n)*\"\"\"', '', function_code)
     return function_code
 
@@ -111,8 +175,15 @@ def add_docstring_to_function(
         function_code: str,
         docstring: str
 ) -> str:
-    """Add a docstring to the function"""
-    # we can do this directly in the functionDef butttt we would then have to use `ast.unparse` which is not perfect...
+    """Add a docstring to the function source code.
+
+    Args:
+        function_code: The source code of the function.
+        docstring: The docstring to add to the function.
+
+    Returns:
+        The source code of the function with the docstring added.
+    """
     indentation = calculate_indentation(function_code)
     docstring = add_indentation('"""' + docstring + '"""', indentation)
     function_code_split = function_code.strip().split("\n")

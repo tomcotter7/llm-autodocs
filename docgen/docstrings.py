@@ -4,23 +4,23 @@ from typing import Optional
 
 from docgen.pydantic_models import FunctionDocstring, ModuleDocstring
 
+def add_string(docstring: str, title: str, content: Optional[str]) -> str:
+    if not content:
+        return docstring
+    docstring += f"{title}:\n\t{content}\n"
+    return docstring
+
+def add_list(docstring: str, title: str, content: Optional[list[str]]) -> str:
+    if not content:
+        return docstring
+    docstring += f"{title}:\n"
+    for item in content:
+        docstring += f"\t{item}\n"
+    return docstring
+
 def build_function_docstring_from_object(docstring_object: FunctionDocstring) -> str:
     init_docstring = f'{docstring_object.summary}\n\n{docstring_object.description}\n'
 
-
-    def add_string(docstring: str, title: str, content: Optional[str]) -> str:
-        if not content:
-            return docstring
-        docstring += f"{title}:\n\t{content}\n"
-        return docstring
-
-    def add_list(docstring: str, title: str, content: Optional[list[str]]) -> str:
-        if not content:
-            return docstring
-        docstring += f"{title}:\n"
-        for item in content:
-            docstring += f"\t{item}\n"
-        return docstring
     
     init_docstring = add_list(init_docstring, "Args", docstring_object.parameters)
     init_docstring = add_string(init_docstring, "Returns", docstring_object.returns)
@@ -34,13 +34,12 @@ def build_function_docstring_from_object(docstring_object: FunctionDocstring) ->
     return init_docstring
 
 def build_module_docstring_from_object(docstring_object: ModuleDocstring) -> str:
-    print(docstring_object.additional_info)
     init_docstring = docstring_object.summary
     if docstring_object.additional_info is not None:
         init_docstring += "\n\n" + docstring_object.additional_info
 
     if docstring_object.usage is not None:
-        init_docstring += "\n\nUsage:\n\t" + docstring_object.usage.replace("\n", "\n\t")
+        init_docstring += "\n\nUsage:\n\t" + docstring_object.usage
 
     if docstring_object.additional_info or docstring_object.usage:
         init_docstring += "\n"
